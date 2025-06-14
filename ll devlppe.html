@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>MS ACCESS - Défi Mathématique</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      background: #000;
+      color: #0f0;
+      font-family: 'Courier New', monospace;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      touch-action: manipulation; /* Ajout pour meilleure réactivité mobile */
+    }
+    
+    #login {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      z-index: 10;
+    }
+    
+    #login h1 {
+      font-size: 2.5rem;
+      margin-bottom: 2rem;
+      text-shadow: 0 0 10px #0f0;
+    }
+    
+    #code {
+      font-size: 2rem;
+      padding: 1rem;
+      width: 200px;
+      background: #111;
+      border: 3px solid #0f0;
+      color: #0f0;
+      text-align: center;
+      text-transform: uppercase;
+      outline: none;
+      margin-bottom: 1rem; /* Ajout pour espacement avec le bouton */
+    }
+    
+    /* Nouveau style pour les boutons ENTRER */
+    .enter-btn {
+      padding: 0.8rem 2rem;
+      background: rgba(0, 30, 0, 0.3);
+      border: 2px solid #0f0;
+      color: #0f0;
+      font-family: 'Courier New', monospace;
+      font-size: 1.2rem;
+      cursor: pointer;
+      transition: all 0.3s;
+      margin-top: 0.5rem;
+    }
+    
+    .enter-btn:hover {
+      background: #0f0;
+      color: #000;
+      box-shadow: 0 0 10px #0f0;
+    }
+    
+    #game {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      z-index: 10;
+      text-align: center;
+    }
+    
+    #calculation {
+      font-size: 3rem;
+      margin: 2rem 0;
+      color: #0ff;
+      text-shadow: 0 0 10px #0ff;
+    }
+    
+    #answer {
+      font-size: 2rem;
+      padding: 1rem;
+      width: 200px;
+      background: #111;
+      border: 3px solid #0f0;
+      color: #0f0;
+      text-align: center;
+      outline: none;
+      margin-bottom: 1rem; /* Ajout pour espacement avec le bouton */
+    }
+    
+    #timer {
+      font-size: 1.5rem;
+      margin-top: 1rem;
+      color: #f00;
+      text-shadow: 0 0 5px #f00;
+    }
+    
+    #score {
+      font-size: 1.5rem;
+      margin-top: 1rem;
+    }
+    
+    #feedback {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-size: 4rem;
+      z-index: 100;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.3s;
+      background-color: rgba(0, 0, 0, 0.9);
+    }
+    
+    .feedback-text {
+      margin: 1rem 0;
+      text-align: center;
+      padding: 2rem;
+    }
+    
+    .success {
+      color: #0f0;
+      text-shadow: 0 0 20px #0f0;
+      animation: pulse-success 0.5s infinite alternate;
+    }
+    
+    .error {
+      color: #f00;
+      text-shadow: 0 0 20px #f00;
+      animation: pulse-error 0.5s infinite alternate;
+    }
+    
+    @keyframes pulse-success {
+      from { text-shadow: 0 0 10px #0f0; }
+      to { text-shadow: 0 0 30px #0f0, 0 0 40px #0f0; }
+    }
+    
+    @keyframes pulse-error {
+      from { text-shadow: 0 0 10px #f00; }
+      to { text-shadow: 0 0 30px #f00, 0 0 40px #f00; }
+    }
+    
+    .explosion {
+      position: absolute;
+      font-size: 3rem;
+      font-weight: bold;
+      animation: boom 1s ease-out forwards;
+      z-index: 5;
+      pointer-events: none;
+    }
+    
+    @keyframes boom {
+      0% { transform: translate(0, 0) scale(1); opacity: 1; }
+      100% { transform: translate(var(--x), var(--y)) scale(0); opacity: 0; }
+    }
+    
+    #matrix-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      opacity: 0;
+      transition: opacity 2s;
+    }
+    
+    #end-screen {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 20;
+      background: rgba(0, 0, 0, 0.95);
+      text-align: center;
+      background-image: 
+        radial-gradient(circle at 25% 25%, rgba(0, 255, 0, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 75% 75%, rgba(0, 255, 255, 0.1) 0%, transparent 50%);
+    }
+
+    #hacker-container {
+      background: rgba(0, 20, 0, 0.7);
+      border: 2px solid #0f0;
+      padding: 2rem;
+      width: 90%;
+      max-width: 800px;
+      box-shadow: 0 0 20px #0f0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    #hacker-container::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, #0f0, transparent);
+      animation: scanline 3s linear infinite;
+    }
+
+    @keyframes scanline {
+      0% { top: 0; }
+      100% { top: 100%; }
+    }
+
+    #hacker-name {
+      font-size: 3.5rem;
+      margin-bottom: 1.5rem;
+      color: #0f0;
+      text-shadow: 0 0 15px #0f0;
+      animation: pulse 2s infinite alternate;
+      letter-spacing: 2px;
+    }
+
+    #access-denied {
+      font-size: 3rem;
+      color: #f00;
+      text-shadow: 0 0 20px #f00;
+      margin-bottom: 2rem;
+    }
+
+    .hacker-links {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin: 2rem 0;
+    }
+
+    .hacker-link {
+      color: #0f0;
+      font-size: 1.3rem;
+      text-decoration: none;
+      border: 1px solid #0f0;
+      padding: 12px 25px;
+      transition: all 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(0, 30, 0, 0.3);
+    }
+
+    .hacker-link:hover {
+      background: #0f0;
+      color: #000;
+      box-shadow: 0 0 15px #0f0;
+    }
+
+    .github-icon {
+      width: 24px;
+      height: 24px;
+      filter: invert(70%) sepia(60%) saturate(1000%) hue-rotate(80deg);
+    }
+
+    #message-form {
+      margin-top: 2rem;
+      width: 100%;
+      max-width: 600px;
+    }
+
+    #anonymous-message {
+      width: 100%;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      background: rgba(0, 20, 0, 0.3);
+      border: 1px solid #0f0;
+      color: #0f0;
+      font-family: 'Courier New', monospace;
+      font-size: 1.1rem;
+      resize: none;
+      height: 200px;
+      box-shadow: inset 0 0 10px rgba(0, 255, 0, 0.3);
+    }
+
+    #anonymous-message::placeholder {
+      color: #0a0;
+      opacity: 0.7;
+      font-style: italic;
+    }
+
+    #send-message {
+      padding: 1rem 3rem;
+      background: transparent;
+      border: 1px solid #0f0;
+      color: #0f0;
+      cursor: pointer;
+      font-family: 'Courier New', monospace;
+      font-size: 1.2rem;
+      transition: all 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    #send-message:hover {
+      background: rgba(0, 255, 0, 0.2);
+      text-shadow: 0 0 10px #0f0;
+    }
+
+    #send-message::after {
+      content: "";
+      position: absolute;
+      top: -50%;
+      left: -60%;
+      width: 50px;
+      height: 200%;
+      background: linear-gradient(
+        to bottom right,
+        transparent,
+        transparent,
+        rgba(0, 255, 0, 0.4),
+        transparent,
+        transparent
+      );
+      transform: rotate(30deg);
+      transition: all 0.7s;
+    }
+
+    #send-message:hover::after {
+      left: 110%;
+    }
+
+    #form-confirmation {
+      margin-top: 1.5rem;
+      color: #0f0;
+      font-size: 1.2rem;
+      opacity: 0;
+      transition: opacity 0.5s;
+      text-shadow: 0 0 5px #0f0;
+    }
+
+    .binary-code {
+      position: absolute;
+      color: rgba(0, 255, 0, 0.1);
+      font-size: 0.8rem;
+      user-select: none;
+      z-index: -1;
+      animation: flicker 5s infinite alternate;
+    }
+
+    @keyframes flicker {
+      0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
+        opacity: 0.1;
+      }
+      20%, 22%, 24%, 55% {
+        opacity: 0.3;
+      }
+    }
+
+    #try-again {
+      margin-top: 2rem;
+      color: #0f0;
+      font-size: 1.5rem;
+      cursor: pointer;
+      text-decoration: underline;
+      padding: 10px 20px;
+      border: 1px solid #0f0;
+    }
+
+    #try-again:hover {
+      background: rgba(0, 255, 0, 0.1);
+    }
+  </style>
+</head>
+<body>
+  <canvas id="matrix-bg"></canvas>
+  
+  <div id="login">
+    <h1>SYSTÈME VERROUILLÉ</h1>
+    <p>Entrez le code "MS" pour continuer</p>
+    <input id="code" maxlength="2" autofocus />
+    <button class="enter-btn" id="login-btn">ENTRER</button>
+  </div>
+  
+  <div id="game">
+    <h2>DÉFI MATHÉMATIQUE</h2>
+    <p>Résolvez 4 calculs en moins de 5.5 secondes chacun</p>
+    <div id="calculation">?</div>
+    <input type="number" id="answer" placeholder="Réponse" autocomplete="off">
+    <button class="enter-btn" id="submit-answer">ENTRER</button>
+    <div id="timer">Temps: 5.5s</div>
+    <div id="score">Calculs réussis: 0/4</div>
+  </div>
+  
+  <div id="feedback">
+    <div id="feedback-text" class="feedback-text"></div>
+  </div>
+  
+  <div id="end-screen">
+    <div id="hacker-container">
+      <div class="binary-code" style="top: 10%; left: 5%;">10101010</div>
+      <div class="binary-code" style="top: 30%; right: 10%;">11100010</div>
+      <div class="binary-code" style="bottom: 20%; left: 15%;">01010101</div>
+      
+      <div id="hacker-name"></div>
+      <div id="access-denied"></div>
+      <p id="result-message"></p>
+      
+      <div id="authorized-content" style="display: none;">
+        <div class="hacker-links">
+          <a href="https://github.com/ilyass-moussa" class="hacker-link" target="_blank">
+            <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" class="github-icon">
+            GitHub Profile
+          </a>
+        </div>
+        
+        <div id="message-form">
+          <h3>ZONE DE MESSAGE ANONYME</h3>
+          <textarea id="anonymous-message" placeholder="Je ne peux pas savoir qui a écrit ce message... C'est totalement anonyme !"></textarea>
+          <button id="send-message">ENVOYER LE MESSAGE</button>
+          <div id="form-confirmation">Message crypté et envoyé anonymement!</div>
+        </div>
+      </div>
+      
+      <div id="try-again" style="display: none;">[ Essayer à nouveau ]</div>
+    </div>
+  </div>
+
+  <script>
+    const canvas = document.getElementById('matrix-bg');
+    const ctx = canvas.getContext('2d');
+    
+    function initMatrix() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      
+      const chars = "01アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン";
+      const fontSize = 16;
+      const columns = canvas.width / fontSize;
+      const drops = Array(Math.floor(columns)).fill(0);
+      
+      function draw() {
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = '#0f0';
+        ctx.font = `${fontSize}px monospace`;
+        
+        for (let i = 0; i < drops.length; i++) {
+          const text = chars[Math.floor(Math.random() * chars.length)];
+          ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+          if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
+          drops[i]++;
+        }
+      }
+      setInterval(draw, 50);
+    }
+    
+    const login = document.getElementById('login');
+    const game = document.getElementById('game');
+    const calculationEl = document.getElementById('calculation');
+    const answerInput = document.getElementById('answer');
+    const timerEl = document.getElementById('timer');
+    const scoreEl = document.getElementById('score');
+    const feedbackEl = document.getElementById('feedback');
+    const feedbackText = document.getElementById('feedback-text');
+    const endScreen = document.getElementById('end-screen');
+    const hackerName = document.getElementById('hacker-name');
+    const accessDenied = document.getElementById('access-denied');
+    const resultMessage = document.getElementById('result-message');
+    const authorizedContent = document.getElementById('authorized-content');
+    const tryAgain = document.getElementById('try-again');
+    const sendMessageBtn = document.getElementById('send-message');
+    const formConfirmation = document.getElementById('form-confirmation');
+    const loginBtn = document.getElementById('login-btn');
+    const submitAnswerBtn = document.getElementById('submit-answer');
+    
+    let currentCalculation = null;
+    let correctAnswer = null;
+    let timeLeft = 5.5; // Changé à 5.5 secondes
+    let timer = null;
+    let score = 0;
+    let calculationsDone = 0;
+    const totalCalculations = 4;
+    const requiredScore = 3;
+    
+    // Gestion du code d'accès
+    document.getElementById('code').addEventListener('input', function(e) {
+      if (this.value.toUpperCase() === 'MS') {
+        handleLogin();
+      } else if (this.value.length === 2) {
+        this.value = '';
+        showFeedback('Code incorrect', 'error');
+      }
+    });
+    
+    loginBtn.addEventListener('click', handleLogin);
+    
+    function handleLogin() {
+      if (document.getElementById('code').value.toUpperCase() === 'MS') {
+        createExplosion();
+        setTimeout(() => {
+          login.style.display = 'none';
+          game.style.display = 'flex';
+          document.getElementById('matrix-bg').style.opacity = '1';
+          initMatrix();
+          startGame();
+        }, 1000);
+      } else {
+        showFeedback('Code incorrect', 'error');
+      }
+    }
+    
+    function createExplosion() {
+      const colors = ['#0f0', '#0ff', '#f0f', '#ff0', '#f00'];
+      for (let i = 0; i < 50; i++) {
+        ['M', 'S'].forEach(letter => {
+          const particle = document.createElement('div');
+          particle.className = 'explosion';
+          particle.textContent = letter;
+          particle.style.color = colors[Math.floor(Math.random() * colors.length)];
+          particle.style.left = `${50 + (Math.random() - 0.5) * 20}%`;
+          particle.style.top = '50%';
+          particle.style.setProperty('--x', `${(Math.random() - 0.5) * 1000}px`);
+          particle.style.setProperty('--y', `${(Math.random() - 0.5) * 1000}px`);
+          document.body.appendChild(particle);
+          setTimeout(() => particle.remove(), 1000);
+        });
+      }
+    }
+    
+    function createNumberExplosion(number) {
+      const colors = ['#0f0', '#0ff', '#f0f', '#ff0', '#f00'];
+      for (let i = 0; i < 30; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'explosion';
+        particle.textContent = number;
+        particle.style.color = colors[Math.floor(Math.random() * colors.length)];
+        particle.style.left = `${50 + (Math.random() - 0.5) * 20}%`;
+        particle.style.top = '50%';
+        particle.style.setProperty('--x', `${(Math.random() - 0.5) * 500}px`);
+        particle.style.setProperty('--y', `${(Math.random() - 0.5) * 500}px`);
+        document.body.appendChild(particle);
+        setTimeout(() => particle.remove(), 1000);
+      }
+    }
+    
+    function generateBinaryCode() {
+      const container = document.getElementById('hacker-container');
+      for (let i = 0; i < 15; i++) {
+        const binary = document.createElement('div');
+        binary.className = 'binary-code';
+        binary.textContent = Math.random().toString(2).substring(2, 10);
+        binary.style.top = `${Math.random() * 90}%`;
+        binary.style.left = `${Math.random() * 90}%`;
+        container.appendChild(binary);
+      }
+    }
+    
+    function startGame() {
+      score = 0;
+      calculationsDone = 0;
+      scoreEl.textContent = `Calculs réussis: ${score}/${totalCalculations}`;
+      generateCalculation();
+      answerInput.focus();
+    }
+    
+    function generateCalculation() {
+      const operations = ['+', '-', '*'];
+      const a = Math.floor(Math.random() * 10) + 1;
+      const b = Math.floor(Math.random() * 10) + 1;
+      const op = operations[Math.floor(Math.random() * operations.length)];
+      
+      currentCalculation = `${a} ${op} ${b}`;
+      correctAnswer = eval(currentCalculation);
+      calculationEl.textContent = currentCalculation;
+      
+      answerInput.value = '';
+      timeLeft = 5.5; // Changé à 5.5 secondes
+      updateTimer();
+      
+      clearInterval(timer);
+      timer = setInterval(() => {
+        timeLeft -= 0.1;
+        updateTimer();
+        if (timeLeft <= 0) {
+          clearInterval(timer);
+          timeUp();
+        }
+      }, 100);
+    }
+    
+    function updateTimer() {
+      timerEl.textContent = `Temps: ${timeLeft.toFixed(1)}s`;
+      timerEl.style.color = timeLeft < 1 ? '#f00' : timeLeft < 2 ? '#ff0' : '#0f0';
+    }
+    
+    function showFeedback(message, type) {
+      feedbackText.textContent = message;
+      feedbackText.className = `feedback-text ${type}`;
+      feedbackEl.style.opacity = '1';
+      setTimeout(() => {
+        feedbackEl.style.opacity = '0';
+      }, 1000);
+    }
+    
+    function timeUp() {
+      showFeedback('Temps écoulé', 'error');
+      setTimeout(() => {
+        calculationsDone++;
+        if (calculationsDone < totalCalculations) {
+          generateCalculation();
+        } else {
+          endGame();
+        }
+      }, 1000);
+    }
+    
+    // Gestion de la réponse (touche Entrée)
+    answerInput.addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        checkAnswer();
+      }
+    });
+    
+    // Gestion de la réponse (bouton)
+    submitAnswerBtn.addEventListener('click', checkAnswer);
+    
+    function checkAnswer() {
+      const userAnswer = parseFloat(answerInput.value);
+      if (isNaN(userAnswer)) {
+        showFeedback('Entrée invalide', 'error');
+        return;
+      }
+      
+      clearInterval(timer);
+      
+      if (Math.abs(userAnswer - correctAnswer) < 0.0001) {
+        score++;
+        scoreEl.textContent = `Calculs réussis: ${score}/${totalCalculations}`;
+        const messages = ['Bien joué!', 'Correct!', 'Parfait!', 'Excellent!'];
+        showFeedback(messages[Math.floor(Math.random() * messages.length)], 'success');
+        createNumberExplosion(correctAnswer);
+      } else {
+        showFeedback('Incorrect', 'error');
+      }
+      
+      setTimeout(() => {
+        calculationsDone++;
+        if (calculationsDone < totalCalculations) {
+          generateCalculation();
+        } else {
+          endGame();
+        }
+      }, 1000);
+    }
+    
+    function endGame() {
+      setTimeout(() => {
+        game.style.display = 'none';
+        endScreen.style.display = 'flex';
+        
+        if (score >= requiredScore) {
+          hackerName.textContent = 'ILYASS MOUSSA';
+          resultMessage.textContent = '>> ACCÈS AUTORISÉ <<\n>> Système déverrouillé avec succès <<';
+          authorizedContent.style.display = 'block';
+          accessDenied.style.display = 'none';
+          tryAgain.style.display = 'none';
+          generateBinaryCode();
+        } else {
+          hackerName.textContent = '';
+          accessDenied.textContent = 'ACCÈS REFUSÉ';
+          resultMessage.textContent = `>> ${score}/${totalCalculations} calculs réussis <<\n>> ${requiredScore} requis pour accéder <<`;
+          authorizedContent.style.display = 'none';
+          accessDenied.style.display = 'block';
+          tryAgain.style.display = 'block';
+        }
+      }, 1000);
+    }
+    
+    tryAgain.addEventListener('click', function() {
+      endScreen.style.display = 'none';
+      startGame();
+      game.style.display = 'flex';
+    });
+    
+    sendMessageBtn.addEventListener('click', function() {
+      const message = document.getElementById('anonymous-message').value;
+      if (message.trim() !== '') {
+        console.log('Message anonyme:', message);
+        formConfirmation.style.opacity = '1';
+        document.getElementById('anonymous-message').value = '';
+        setTimeout(() => {
+          formConfirmation.style.opacity = '0';
+        }, 3000);
+      }
+    });
+
+    // Initialiser quelques codes binaires statiques
+    generateBinaryCode();
+  </script>
+</body>
+</html>
