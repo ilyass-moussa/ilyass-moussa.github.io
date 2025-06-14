@@ -9,7 +9,7 @@
       padding: 0;
       box-sizing: border-box;
     }
-    
+
     body {
       background: #000;
       color: #0f0;
@@ -20,9 +20,9 @@
       align-items: center;
       justify-content: center;
       overflow: hidden;
-      touch-action: manipulation; /* Ajout pour meilleure réactivité mobile */
+      touch-action: manipulation;
     }
-    
+
     #login {
       display: flex;
       flex-direction: column;
@@ -30,13 +30,13 @@
       text-align: center;
       z-index: 10;
     }
-    
+
     #login h1 {
       font-size: 2.5rem;
       margin-bottom: 2rem;
       text-shadow: 0 0 10px #0f0;
     }
-    
+
     #code {
       font-size: 2rem;
       padding: 1rem;
@@ -47,10 +47,9 @@
       text-align: center;
       text-transform: uppercase;
       outline: none;
-      margin-bottom: 1rem; /* Ajout pour espacement avec le bouton */
+      margin-bottom: 1rem;
     }
-    
-    /* Nouveau style pour les boutons ENTRER */
+
     .enter-btn {
       padding: 0.8rem 2rem;
       background: rgba(0, 30, 0, 0.3);
@@ -62,13 +61,13 @@
       transition: all 0.3s;
       margin-top: 0.5rem;
     }
-    
+
     .enter-btn:hover {
       background: #0f0;
       color: #000;
       box-shadow: 0 0 10px #0f0;
     }
-    
+
     #game {
       display: none;
       flex-direction: column;
@@ -76,14 +75,14 @@
       z-index: 10;
       text-align: center;
     }
-    
+
     #calculation {
       font-size: 3rem;
       margin: 2rem 0;
       color: #0ff;
       text-shadow: 0 0 10px #0ff;
     }
-    
+
     #answer {
       font-size: 2rem;
       padding: 1rem;
@@ -93,21 +92,21 @@
       color: #0f0;
       text-align: center;
       outline: none;
-      margin-bottom: 1rem; /* Ajout pour espacement avec le bouton */
+      margin-bottom: 1rem;
     }
-    
+
     #timer {
       font-size: 1.5rem;
       margin-top: 1rem;
       color: #f00;
       text-shadow: 0 0 5px #f00;
     }
-    
+
     #score {
       font-size: 1.5rem;
       margin-top: 1rem;
     }
-    
+
     #feedback {
       position: fixed;
       top: 0;
@@ -125,35 +124,35 @@
       transition: opacity 0.3s;
       background-color: rgba(0, 0, 0, 0.9);
     }
-    
+
     .feedback-text {
       margin: 1rem 0;
       text-align: center;
       padding: 2rem;
     }
-    
+
     .success {
       color: #0f0;
       text-shadow: 0 0 20px #0f0;
       animation: pulse-success 0.5s infinite alternate;
     }
-    
+
     .error {
       color: #f00;
       text-shadow: 0 0 20px #f00;
       animation: pulse-error 0.5s infinite alternate;
     }
-    
+
     @keyframes pulse-success {
       from { text-shadow: 0 0 10px #0f0; }
       to { text-shadow: 0 0 30px #0f0, 0 0 40px #0f0; }
     }
-    
+
     @keyframes pulse-error {
       from { text-shadow: 0 0 10px #f00; }
       to { text-shadow: 0 0 30px #f00, 0 0 40px #f00; }
     }
-    
+
     .explosion {
       position: absolute;
       font-size: 3rem;
@@ -162,12 +161,12 @@
       z-index: 5;
       pointer-events: none;
     }
-    
+
     @keyframes boom {
       0% { transform: translate(0, 0) scale(1); opacity: 1; }
       100% { transform: translate(var(--x), var(--y)) scale(0); opacity: 0; }
     }
-    
+
     #matrix-bg {
       position: fixed;
       top: 0;
@@ -178,7 +177,7 @@
       opacity: 0;
       transition: opacity 2s;
     }
-    
+
     #end-screen {
       display: none;
       flex-direction: column;
@@ -192,7 +191,7 @@
       z-index: 20;
       background: rgba(0, 0, 0, 0.95);
       text-align: center;
-      background-image: 
+      background-image:
         radial-gradient(circle at 25% 25%, rgba(0, 255, 0, 0.1) 0%, transparent 50%),
         radial-gradient(circle at 75% 75%, rgba(0, 255, 255, 0.1) 0%, transparent 50%);
     }
@@ -383,14 +382,14 @@
 </head>
 <body>
   <canvas id="matrix-bg"></canvas>
-  
+
   <div id="login">
     <h1>SYSTÈME VERROUILLÉ</h1>
     <p>Entrez le code "MS" pour continuer</p>
     <input id="code" maxlength="2" autofocus />
     <button class="enter-btn" id="login-btn">ENTRER</button>
   </div>
-  
+
   <div id="game">
     <h2>DÉFI MATHÉMATIQUE</h2>
     <p>Résolvez 4 calculs en moins de 5.5 secondes chacun</p>
@@ -400,21 +399,21 @@
     <div id="timer">Temps: 5.5s</div>
     <div id="score">Calculs réussis: 0/4</div>
   </div>
-  
+
   <div id="feedback">
     <div id="feedback-text" class="feedback-text"></div>
   </div>
-  
+
   <div id="end-screen">
     <div id="hacker-container">
       <div class="binary-code" style="top: 10%; left: 5%;">10101010</div>
       <div class="binary-code" style="top: 30%; right: 10%;">11100010</div>
       <div class="binary-code" style="bottom: 20%; left: 15%;">01010101</div>
-      
+
       <div id="hacker-name"></div>
       <div id="access-denied"></div>
       <p id="result-message"></p>
-      
+
       <div id="authorized-content" style="display: none;">
         <div class="hacker-links">
           <a href="https://github.com/ilyass-moussa" class="hacker-link" target="_blank">
@@ -422,15 +421,26 @@
             GitHub Profile
           </a>
         </div>
-        
+
         <div id="message-form">
           <h3>ZONE DE MESSAGE ANONYME</h3>
-          <textarea id="anonymous-message" placeholder="Je ne peux pas savoir qui a écrit ce message... C'est totalement anonyme !"></textarea>
-          <button id="send-message">ENVOYER LE MESSAGE</button>
+          <form action="https://formsubmit.co/ilyassmoussa742004@gmail.com" method="POST">
+            <input type="hidden" name="_captcha" value="false">
+            <input type="hidden" name="_subject" value="Nouveau message anonyme depuis votre site">
+            <input type="hidden" name="_next" value="https://ilyass-moussa.github.io/#message-envoye">
+            
+            <textarea 
+              id="anonymous-message" 
+              name="message" 
+              placeholder="Je ne peux pas savoir qui a écrit ce message... C'est totalement anonyme !" 
+              required
+            ></textarea>
+            <button id="send-message" type="submit">ENVOYER LE MESSAGE</button>
+          </form>
           <div id="form-confirmation">Message crypté et envoyé anonymement!</div>
         </div>
       </div>
-      
+
       <div id="try-again" style="display: none;">[ Essayer à nouveau ]</div>
     </div>
   </div>
@@ -438,22 +448,22 @@
   <script>
     const canvas = document.getElementById('matrix-bg');
     const ctx = canvas.getContext('2d');
-    
+
     function initMatrix() {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
-      
+
       const chars = "01アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン";
       const fontSize = 16;
       const columns = canvas.width / fontSize;
       const drops = Array(Math.floor(columns)).fill(0);
-      
+
       function draw() {
         ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
         ctx.fillStyle = '#0f0';
         ctx.font = `${fontSize}px monospace`;
-        
+
         for (let i = 0; i < drops.length; i++) {
           const text = chars[Math.floor(Math.random() * chars.length)];
           ctx.fillText(text, i * fontSize, drops[i] * fontSize);
@@ -463,7 +473,7 @@
       }
       setInterval(draw, 50);
     }
-    
+
     const login = document.getElementById('login');
     const game = document.getElementById('game');
     const calculationEl = document.getElementById('calculation');
@@ -482,17 +492,16 @@
     const formConfirmation = document.getElementById('form-confirmation');
     const loginBtn = document.getElementById('login-btn');
     const submitAnswerBtn = document.getElementById('submit-answer');
-    
+
     let currentCalculation = null;
     let correctAnswer = null;
-    let timeLeft = 5.5; // Changé à 5.5 secondes
+    let timeLeft = 5.5;
     let timer = null;
     let score = 0;
     let calculationsDone = 0;
     const totalCalculations = 4;
     const requiredScore = 3;
-    
-    // Gestion du code d'accès
+
     document.getElementById('code').addEventListener('input', function(e) {
       if (this.value.toUpperCase() === 'MS') {
         handleLogin();
@@ -501,9 +510,9 @@
         showFeedback('Code incorrect', 'error');
       }
     });
-    
+
     loginBtn.addEventListener('click', handleLogin);
-    
+
     function handleLogin() {
       if (document.getElementById('code').value.toUpperCase() === 'MS') {
         createExplosion();
@@ -518,7 +527,7 @@
         showFeedback('Code incorrect', 'error');
       }
     }
-    
+
     function createExplosion() {
       const colors = ['#0f0', '#0ff', '#f0f', '#ff0', '#f00'];
       for (let i = 0; i < 50; i++) {
@@ -536,7 +545,7 @@
         });
       }
     }
-    
+
     function createNumberExplosion(number) {
       const colors = ['#0f0', '#0ff', '#f0f', '#ff0', '#f00'];
       for (let i = 0; i < 30; i++) {
@@ -552,7 +561,7 @@
         setTimeout(() => particle.remove(), 1000);
       }
     }
-    
+
     function generateBinaryCode() {
       const container = document.getElementById('hacker-container');
       for (let i = 0; i < 15; i++) {
@@ -564,7 +573,7 @@
         container.appendChild(binary);
       }
     }
-    
+
     function startGame() {
       score = 0;
       calculationsDone = 0;
@@ -572,21 +581,21 @@
       generateCalculation();
       answerInput.focus();
     }
-    
+
     function generateCalculation() {
       const operations = ['+', '-', '*'];
       const a = Math.floor(Math.random() * 10) + 1;
       const b = Math.floor(Math.random() * 10) + 1;
       const op = operations[Math.floor(Math.random() * operations.length)];
-      
+
       currentCalculation = `${a} ${op} ${b}`;
       correctAnswer = eval(currentCalculation);
       calculationEl.textContent = currentCalculation;
-      
+
       answerInput.value = '';
-      timeLeft = 5.5; // Changé à 5.5 secondes
+      timeLeft = 5.5;
       updateTimer();
-      
+
       clearInterval(timer);
       timer = setInterval(() => {
         timeLeft -= 0.1;
@@ -597,12 +606,12 @@
         }
       }, 100);
     }
-    
+
     function updateTimer() {
       timerEl.textContent = `Temps: ${timeLeft.toFixed(1)}s`;
       timerEl.style.color = timeLeft < 1 ? '#f00' : timeLeft < 2 ? '#ff0' : '#0f0';
     }
-    
+
     function showFeedback(message, type) {
       feedbackText.textContent = message;
       feedbackText.className = `feedback-text ${type}`;
@@ -611,7 +620,7 @@
         feedbackEl.style.opacity = '0';
       }, 1000);
     }
-    
+
     function timeUp() {
       showFeedback('Temps écoulé', 'error');
       setTimeout(() => {
@@ -623,26 +632,24 @@
         }
       }, 1000);
     }
-    
-    // Gestion de la réponse (touche Entrée)
+
     answerInput.addEventListener('keypress', function(e) {
       if (e.key === 'Enter') {
         checkAnswer();
       }
     });
-    
-    // Gestion de la réponse (bouton)
+
     submitAnswerBtn.addEventListener('click', checkAnswer);
-    
+
     function checkAnswer() {
       const userAnswer = parseFloat(answerInput.value);
       if (isNaN(userAnswer)) {
         showFeedback('Entrée invalide', 'error');
         return;
       }
-      
+
       clearInterval(timer);
-      
+
       if (Math.abs(userAnswer - correctAnswer) < 0.0001) {
         score++;
         scoreEl.textContent = `Calculs réussis: ${score}/${totalCalculations}`;
@@ -652,7 +659,7 @@
       } else {
         showFeedback('Incorrect', 'error');
       }
-      
+
       setTimeout(() => {
         calculationsDone++;
         if (calculationsDone < totalCalculations) {
@@ -662,12 +669,12 @@
         }
       }, 1000);
     }
-    
+
     function endGame() {
       setTimeout(() => {
         game.style.display = 'none';
         endScreen.style.display = 'flex';
-        
+
         if (score >= requiredScore) {
           hackerName.textContent = 'ILYASS MOUSSA';
           resultMessage.textContent = '>> ACCÈS AUTORISÉ <<\n>> Système déverrouillé avec succès <<';
@@ -685,26 +692,34 @@
         }
       }, 1000);
     }
-    
+
     tryAgain.addEventListener('click', function() {
       endScreen.style.display = 'none';
       startGame();
       game.style.display = 'flex';
     });
-    
-    sendMessageBtn.addEventListener('click', function() {
-      const message = document.getElementById('anonymous-message').value;
-      if (message.trim() !== '') {
-        console.log('Message anonyme:', message);
-        formConfirmation.style.opacity = '1';
-        document.getElementById('anonymous-message').value = '';
-        setTimeout(() => {
-          formConfirmation.style.opacity = '0';
-        }, 3000);
-      }
+
+    // Gestion du formulaire de contact
+    document.querySelector('#message-form form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const form = this;
+      
+      // Afficher la confirmation
+      formConfirmation.style.opacity = '1';
+      setTimeout(() => {
+        formConfirmation.style.opacity = '0';
+      }, 3000);
+      
+      // Envoyer le formulaire
+      fetch(form.action, {
+        method: 'POST',
+        body: new FormData(form)
+      }).then(() => {
+        form.reset();
+      });
     });
 
-    // Initialiser quelques codes binaires statiques
+    // Initialisation
     generateBinaryCode();
   </script>
 </body>
