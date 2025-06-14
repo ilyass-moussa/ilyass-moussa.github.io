@@ -68,6 +68,14 @@
       box-shadow: 0 0 10px #0f0;
     }
 
+    #difficulty {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      z-index: 10;
+      text-align: center;
+    }
+
     #game {
       display: none;
       flex-direction: column;
@@ -271,6 +279,12 @@
       filter: invert(70%) sepia(60%) saturate(1000%) hue-rotate(80deg);
     }
 
+    .portfolio-icon {
+      width: 24px;
+      height: 24px;
+      filter: invert(70%) sepia(60%) saturate(1000%) hue-rotate(80deg);
+    }
+
     #message-form {
       margin-top: 2rem;
       width: 100%;
@@ -355,6 +369,108 @@
     #try-again:hover {
       background: rgba(0, 255, 0, 0.1);
     }
+
+    /* Portfolio Section Styles */
+    #portfolio-content {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.95);
+      z-index: 30;
+      overflow-y: auto;
+      padding: 2rem;
+      color: #0f0;
+    }
+
+    #portfolio-close {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      color: #f00;
+      font-size: 2rem;
+      cursor: pointer;
+      z-index: 31;
+    }
+
+    #portfolio-close:hover {
+      text-shadow: 0 0 10px #f00;
+    }
+
+    .portfolio-section {
+      max-width: 800px;
+      margin: 0 auto;
+      background: rgba(0, 20, 0, 0.1);
+      border: 1px solid #0f0;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .portfolio-section::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, #0f0, transparent);
+      animation: scanline 3s linear infinite;
+    }
+
+    .portfolio-title {
+      font-size: 2rem;
+      color: #0ff;
+      margin-bottom: 1.5rem;
+      border-bottom: 1px solid #0a0;
+      padding-bottom: 0.5rem;
+    }
+
+    .portfolio-text {
+      line-height: 1.6;
+      margin-bottom: 1rem;
+    }
+
+    .portfolio-list {
+      list-style-type: none;
+      margin-left: 1rem;
+    }
+
+    .portfolio-list li::before {
+      content: ">> ";
+      color: #0f0;
+    }
+
+    .portfolio-list li {
+      margin-bottom: 0.5rem;
+    }
+
+    .portfolio-date {
+      color: #0a0;
+      font-style: italic;
+    }
+
+    /* Difficulty buttons */
+    .difficulty-btn {
+      padding: 1rem 2rem;
+      margin: 0.5rem;
+      background: rgba(0, 30, 0, 0.3);
+      border: 2px solid #0f0;
+      color: #0f0;
+      font-family: 'Courier New', monospace;
+      font-size: 1.2rem;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .difficulty-btn:hover {
+      background: #0f0;
+      color: #000;
+      box-shadow: 0 0 10px #0f0;
+    }
   </style>
 </head>
 <body>
@@ -367,14 +483,20 @@
     <button class="enter-btn" id="login-btn">ENTRER</button>
   </div>
 
+  <div id="difficulty">
+    <h2>SÉLECTIONNEZ LA DIFFICULTÉ</h2>
+    <button class="difficulty-btn" id="medium-btn">MOYEN</button>
+    <button class="difficulty-btn" id="hard-btn">DIFFICILE</button>
+  </div>
+
   <div id="game">
     <h2>DÉFI MATHÉMATIQUE</h2>
-    <p>Résolvez 4 calculs en moins de 5.5 secondes chacun</p>
+    <p>Résolvez 6 calculs en moins de 4 secondes chacun</p>
     <div id="calculation">?</div>
     <input type="number" id="answer" placeholder="Réponse" autocomplete="off">
     <button class="enter-btn" id="submit-answer">ENTRER</button>
-    <div id="timer">Temps: 5.5s</div>
-    <div id="score">Calculs réussis: 0/4</div>
+    <div id="timer">Temps: 4.0s</div>
+    <div id="score">Calculs réussis: 0/6</div>
   </div>
 
   <div id="feedback">
@@ -397,9 +519,14 @@
             <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" class="github-icon">
             GitHub Profile
           </a>
+          <a href="#" class="hacker-link" id="portfolio-link">
+            <svg class="portfolio-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm0 22c-5.523 0-10-4.477-10-10S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zm-3-17v14h6V5H9zm2 2h2v10h-2V7z"/>
+            </svg>
+            Portfolio
+          </a>
         </div>
 
-        <!-- FORMULAIRE MODIFIÉ POUR ENVOI DIRECT -->
         <div id="message-form">
           <h3>ZONE DE MESSAGE ANONYME</h3>
           <form id="anonymous-form">
@@ -424,6 +551,74 @@
     </div>
   </div>
 
+  <!-- Portfolio Content -->
+  <div id="portfolio-content">
+    <div id="portfolio-close">X</div>
+    
+    <div class="portfolio-section">
+      <h2 class="portfolio-title">ILYASS MOUSSA</h2>
+      <p class="portfolio-text">Étudiant en Cybersécurité et Protection des Systèmes</p>
+      <p class="portfolio-text">Étudiant en Bachelor Cybersécurité, je suis motivé, à l'écoute et patient. Polyvalent et toujours prêt à apprendre, je suis déterminé à m'impliquer pleinement et à progresser chaque jour.</p>
+    </div>
+
+    <div class="portfolio-section">
+      <h2 class="portfolio-title">DIPLÔMES ET FORMATIONS</h2>
+      
+      <h3>Bac+2 Cybersécurité et Protection des Systèmes</h3>
+      <p class="portfolio-date">Octobre 2024 - Mai 2026</p>
+      <p class="portfolio-text">IMIE PARIS - 70 rue Marius Aufan, 92300 Levallois Perret</p>
+      
+      <h3>Baccalauréat international science mathématique</h3>
+      <p class="portfolio-date">Septembre 2022 - Novembre 2023</p>
+      <p class="portfolio-text">Lycée EL FATH - Taourirt, Maroc</p>
+    </div>
+
+    <div class="portfolio-section">
+      <h2 class="portfolio-title">EXPÉRIENCES PROFESSIONNELLES</h2>
+      
+      <h3>Vendeur/Accueil relation client</h3>
+      <p class="portfolio-date">Juin 2022 - Septembre 2022</p>
+      <p class="portfolio-text">Shopping Time - Taourirt, Maroc (CDI - Temps plein)</p>
+      <ul class="portfolio-list">
+        <li>Accueil, conseil et accompagnement des clients dans leurs achats</li>
+        <li>Prospection, négociation et conclusion de ventes</li>
+        <li>Atteinte des objectifs commerciaux et suivi des performances</li>
+        <li>Gestion des stocks et réassort du point de vente</li>
+        <li>Mise en place de relations durables avec les clients</li>
+        <li>Travail en équipe et participation active à l'organisation du magasin</li>
+      </ul>
+      
+      <h3>Vendeur de fruits - Marché Couvert</h3>
+      <p class="portfolio-date">Juin 2019 - Août 2019</p>
+      <p class="portfolio-text">Marché Couvert - Taourirt, Maroc</p>
+      <ul class="portfolio-list">
+        <li>Accueil des clients avec conseils sur les produits</li>
+        <li>Mise en place du stand chaque matin (présentation, propreté, étiquetage)</li>
+        <li>Réapprovisionnement des étals en fonction de la demande</li>
+        <li>Gestion de la caisse (encaissement, rendu de monnaie)</li>
+        <li>Maintenir l'ordre et la propreté de l'espace de vente</li>
+      </ul>
+    </div>
+
+    <div class="portfolio-section">
+      <h2 class="portfolio-title">COMPÉTENCES</h2>
+      
+      <h3>Informatique</h3>
+      <ul class="portfolio-list">
+        <li>Maîtrise du Pack MS Office</li>
+        <li>Recherches Internet</li>
+        <li>Bases en Cybersécurité</li>
+      </ul>
+      
+      <h3>Langues</h3>
+      <ul class="portfolio-list">
+        <li>Arabe (Langue maternelle)</li>
+        <li>Français (Courant)</li>
+        <li>Anglais (Intermédiaire)</li>
+      </ul>
+    </div>
+  </div>
+
   <script>
     const canvas = document.getElementById('matrix-bg');
     const ctx = canvas.getContext('2d');
@@ -438,9 +633,9 @@
       const drops = Array(Math.floor(columns)).fill(0);
 
       function draw() {
-        ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.03)';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
-        ctx.fillStyle = '#0f0';
+        ctx.fillStyle = '#0a0';
         ctx.font = `${fontSize}px monospace`;
 
         for (let i = 0; i < drops.length; i++) {
@@ -453,7 +648,9 @@
       setInterval(draw, 50);
     }
 
+    // Game elements
     const login = document.getElementById('login');
+    const difficulty = document.getElementById('difficulty');
     const game = document.getElementById('game');
     const calculationEl = document.getElementById('calculation');
     const answerInput = document.getElementById('answer');
@@ -469,16 +666,25 @@
     const tryAgain = document.getElementById('try-again');
     const loginBtn = document.getElementById('login-btn');
     const submitAnswerBtn = document.getElementById('submit-answer');
+    const mediumBtn = document.getElementById('medium-btn');
+    const hardBtn = document.getElementById('hard-btn');
+    const portfolioLink = document.getElementById('portfolio-link');
+    const portfolioContent = document.getElementById('portfolio-content');
+    const portfolioClose = document.getElementById('portfolio-close');
 
+    // Game variables
     let currentCalculation = null;
     let correctAnswer = null;
-    let timeLeft = 5.5;
+    let timeLeft = 4.0;
     let timer = null;
     let score = 0;
     let calculationsDone = 0;
-    const totalCalculations = 4;
-    const requiredScore = 3;
+    const totalCalculations = 6;
+    const requiredScore = 5;
+    let difficultyLevel = 'medium';
+    let isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
+    // Event listeners
     document.getElementById('code').addEventListener('input', function(e) {
       if (this.value.toUpperCase() === 'MS') {
         handleLogin();
@@ -489,22 +695,188 @@
     });
 
     loginBtn.addEventListener('click', handleLogin);
+    mediumBtn.addEventListener('click', () => setDifficulty('medium'));
+    hardBtn.addEventListener('click', () => setDifficulty('hard'));
+    submitAnswerBtn.addEventListener('click', checkAnswer);
+    tryAgain.addEventListener('click', resetGame);
+    portfolioLink.addEventListener('click', showPortfolio);
+    portfolioClose.addEventListener('click', hidePortfolio);
 
+    // Mobile optimization
+    if (isMobile) {
+      answerInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          checkAnswer();
+          answerInput.focus(); // Keep focus for next answer
+        }
+      });
+    } else {
+      answerInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+          checkAnswer();
+        }
+      });
+    }
+
+    // Game functions
     function handleLogin() {
       if (document.getElementById('code').value.toUpperCase() === 'MS') {
         createExplosion();
         setTimeout(() => {
           login.style.display = 'none';
-          game.style.display = 'flex';
-          document.getElementById('matrix-bg').style.opacity = '1';
-          initMatrix();
-          startGame();
+          difficulty.style.display = 'flex';
         }, 1000);
       } else {
         showFeedback('Code incorrect', 'error');
       }
     }
 
+    function setDifficulty(level) {
+      difficultyLevel = level;
+      difficulty.style.display = 'none';
+      game.style.display = 'flex';
+      document.getElementById('matrix-bg').style.opacity = '1';
+      initMatrix();
+      startGame();
+    }
+
+    function startGame() {
+      score = 0;
+      calculationsDone = 0;
+      scoreEl.textContent = `Calculs réussis: ${score}/${totalCalculations}`;
+      generateCalculation();
+      answerInput.focus();
+    }
+
+    function generateCalculation() {
+      let a, b, op;
+      const operations = ['+', '-', '*'];
+      
+      if (difficultyLevel === 'medium') {
+        a = Math.floor(Math.random() * 10) + 1;
+        b = Math.floor(Math.random() * 10) + 1;
+        op = operations[Math.floor(Math.random() * operations.length)];
+      } else { // hard
+        a = Math.floor(Math.random() * 20) + 1;
+        b = Math.floor(Math.random() * 20) + 1;
+        op = operations[Math.floor(Math.random() * operations.length)];
+        // 50% chance to add division in hard mode
+        if (Math.random() > 0.5) {
+          operations.push('/');
+          // For division, ensure whole number result
+          if (op === '/') {
+            b = Math.floor(Math.random() * 10) + 1;
+            a = b * (Math.floor(Math.random() * 10) + 1);
+          }
+        }
+      }
+
+      currentCalculation = `${a} ${op} ${b}`;
+      correctAnswer = eval(currentCalculation);
+      calculationEl.textContent = currentCalculation;
+
+      answerInput.value = '';
+      timeLeft = 4.0;
+      updateTimer();
+
+      clearInterval(timer);
+      timer = setInterval(() => {
+        timeLeft -= 0.1;
+        updateTimer();
+        if (timeLeft <= 0) {
+          clearInterval(timer);
+          timeUp();
+        }
+      }, 100);
+    }
+
+    function updateTimer() {
+      timerEl.textContent = `Temps: ${timeLeft.toFixed(1)}s`;
+      timerEl.style.color = timeLeft < 1 ? '#f00' : timeLeft < 2 ? '#ff0' : '#0f0';
+    }
+
+    function checkAnswer() {
+      const userAnswer = parseFloat(answerInput.value);
+      if (isNaN(userAnswer)) {
+        showFeedback('Entrée invalide', 'error');
+        return;
+      }
+
+      clearInterval(timer);
+
+      if (Math.abs(userAnswer - correctAnswer) < 0.0001) {
+        score++;
+        scoreEl.textContent = `Calculs réussis: ${score}/${totalCalculations}`;
+        const messages = ['Bien joué!', 'Correct!', 'Parfait!', 'Excellent!'];
+        showFeedback(messages[Math.floor(Math.random() * messages.length)], 'success');
+        createNumberExplosion(correctAnswer);
+      } else {
+        showFeedback('Incorrect', 'error');
+      }
+
+      setTimeout(() => {
+        calculationsDone++;
+        if (calculationsDone < totalCalculations) {
+          generateCalculation();
+        } else {
+          endGame();
+        }
+      }, 1000);
+    }
+
+    function timeUp() {
+      showFeedback('Temps écoulé', 'error');
+      setTimeout(() => {
+        calculationsDone++;
+        if (calculationsDone < totalCalculations) {
+          generateCalculation();
+        } else {
+          endGame();
+        }
+      }, 1000);
+    }
+
+    function endGame() {
+      setTimeout(() => {
+        game.style.display = 'none';
+        endScreen.style.display = 'flex';
+
+        if (score >= requiredScore) {
+          hackerName.textContent = 'ILYASS MOUSSA';
+          resultMessage.textContent = '>> ACCÈS AUTORISÉ <<\n>> Système déverrouillé avec succès <<';
+          authorizedContent.style.display = 'block';
+          accessDenied.style.display = 'none';
+          tryAgain.style.display = 'none';
+          generateBinaryCode();
+        } else {
+          hackerName.textContent = '';
+          accessDenied.textContent = 'ACCÈS REFUSÉ';
+          resultMessage.textContent = `>> ${score}/${totalCalculations} calculs réussis <<\n>> ${requiredScore} requis pour accéder <<`;
+          authorizedContent.style.display = 'none';
+          accessDenied.style.display = 'block';
+          tryAgain.style.display = 'block';
+        }
+      }, 1000);
+    }
+
+    function resetGame() {
+      endScreen.style.display = 'none';
+      difficulty.style.display = 'flex';
+    }
+
+    function showPortfolio(e) {
+      e.preventDefault();
+      endScreen.style.display = 'none';
+      portfolioContent.style.display = 'block';
+    }
+
+    function hidePortfolio() {
+      portfolioContent.style.display = 'none';
+      endScreen.style.display = 'flex';
+    }
+
+    // Visual effects
     function createExplosion() {
       const colors = ['#0f0', '#0ff', '#f0f', '#ff0', '#f00'];
       for (let i = 0; i < 50; i++) {
@@ -551,44 +923,6 @@
       }
     }
 
-    function startGame() {
-      score = 0;
-      calculationsDone = 0;
-      scoreEl.textContent = `Calculs réussis: ${score}/${totalCalculations}`;
-      generateCalculation();
-      answerInput.focus();
-    }
-
-    function generateCalculation() {
-      const operations = ['+', '-', '*'];
-      const a = Math.floor(Math.random() * 10) + 1;
-      const b = Math.floor(Math.random() * 10) + 1;
-      const op = operations[Math.floor(Math.random() * operations.length)];
-
-      currentCalculation = `${a} ${op} ${b}`;
-      correctAnswer = eval(currentCalculation);
-      calculationEl.textContent = currentCalculation;
-
-      answerInput.value = '';
-      timeLeft = 5.5;
-      updateTimer();
-
-      clearInterval(timer);
-      timer = setInterval(() => {
-        timeLeft -= 0.1;
-        updateTimer();
-        if (timeLeft <= 0) {
-          clearInterval(timer);
-          timeUp();
-        }
-      }, 100);
-    }
-
-    function updateTimer() {
-      timerEl.textContent = `Temps: ${timeLeft.toFixed(1)}s`;
-      timerEl.style.color = timeLeft < 1 ? '#f00' : timeLeft < 2 ? '#ff0' : '#0f0';
-    }
-
     function showFeedback(message, type) {
       feedbackText.textContent = message;
       feedbackText.className = `feedback-text ${type}`;
@@ -598,85 +932,7 @@
       }, 1000);
     }
 
-    function timeUp() {
-      showFeedback('Temps écoulé', 'error');
-      setTimeout(() => {
-        calculationsDone++;
-        if (calculationsDone < totalCalculations) {
-          generateCalculation();
-        } else {
-          endGame();
-        }
-      }, 1000);
-    }
-
-    answerInput.addEventListener('keypress', function(e) {
-      if (e.key === 'Enter') {
-        checkAnswer();
-      }
-    });
-
-    submitAnswerBtn.addEventListener('click', checkAnswer);
-
-    function checkAnswer() {
-      const userAnswer = parseFloat(answerInput.value);
-      if (isNaN(userAnswer)) {
-        showFeedback('Entrée invalide', 'error');
-        return;
-      }
-
-      clearInterval(timer);
-
-      if (Math.abs(userAnswer - correctAnswer) < 0.0001) {
-        score++;
-        scoreEl.textContent = `Calculs réussis: ${score}/${totalCalculations}`;
-        const messages = ['Bien joué!', 'Correct!', 'Parfait!', 'Excellent!'];
-        showFeedback(messages[Math.floor(Math.random() * messages.length)], 'success');
-        createNumberExplosion(correctAnswer);
-      } else {
-        showFeedback('Incorrect', 'error');
-      }
-
-      setTimeout(() => {
-        calculationsDone++;
-        if (calculationsDone < totalCalculations) {
-          generateCalculation();
-        } else {
-          endGame();
-        }
-      }, 1000);
-    }
-
-    function endGame() {
-      setTimeout(() => {
-        game.style.display = 'none';
-        endScreen.style.display = 'flex';
-
-        if (score >= requiredScore) {
-          hackerName.textContent = 'ILYASS MOUSSA';
-          resultMessage.textContent = '>> ACCÈS AUTORISÉ <<\n>> Système déverrouillé avec succès <<';
-          authorizedContent.style.display = 'block';
-          accessDenied.style.display = 'none';
-          tryAgain.style.display = 'none';
-          generateBinaryCode();
-        } else {
-          hackerName.textContent = '';
-          accessDenied.textContent = 'ACCÈS REFUSÉ';
-          resultMessage.textContent = `>> ${score}/${totalCalculations} calculs réussis <<\n>> ${requiredScore} requis pour accéder <<`;
-          authorizedContent.style.display = 'none';
-          accessDenied.style.display = 'block';
-          tryAgain.style.display = 'block';
-        }
-      }, 1000);
-    }
-
-    tryAgain.addEventListener('click', function() {
-      endScreen.style.display = 'none';
-      startGame();
-      game.style.display = 'flex';
-    });
-
-    // NOUVEAU SCRIPT POUR LE FORMULAIRE DE CONTACT
+    // Contact form
     document.getElementById('anonymous-form').addEventListener('submit', async function(e) {
       e.preventDefault();
       
@@ -685,7 +941,6 @@
       const submitButton = document.getElementById('send-message');
       const confirmation = document.getElementById('form-confirmation');
 
-      // Désactiver le bouton pendant l'envoi
       submitButton.disabled = true;
       submitButton.textContent = 'ENVOI EN COURS...';
 
@@ -699,11 +954,8 @@
         });
 
         if (response.ok) {
-          // Afficher la confirmation
           confirmation.style.opacity = '1';
-          // Réinitialiser le formulaire
           form.reset();
-          // Masquer la confirmation après 3 secondes
           setTimeout(() => {
             confirmation.style.opacity = '0';
           }, 3000);
@@ -711,7 +963,6 @@
           throw new Error('Erreur réseau');
         }
       } catch (error) {
-        // Afficher un message d'erreur
         confirmation.textContent = "Erreur d'envoi - Réessayez";
         confirmation.style.color = "#f00";
         confirmation.style.opacity = '1';
@@ -721,13 +972,12 @@
           confirmation.textContent = "Message envoyé avec succès!";
         }, 3000);
       } finally {
-        // Réactiver le bouton
         submitButton.disabled = false;
         submitButton.textContent = 'ENVOYER';
       }
     });
 
-    // Initialisation
+    // Initialization
     generateBinaryCode();
   </script>
 </body>
