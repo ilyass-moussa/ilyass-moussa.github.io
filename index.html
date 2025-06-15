@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <title>MS ACCESS - Défi Mathématique</title>
+  <title>ILYASS MOUSSA - Étudiant en Cybersécurité</title>
   <style>
     * {
       margin: 0;
@@ -113,6 +113,12 @@
     #score {
       font-size: 1.5rem;
       margin-top: 1rem;
+    }
+
+    #best-score {
+      font-size: 1rem;
+      margin-top: 0.5rem;
+      color: #0a0;
     }
 
     #feedback {
@@ -252,6 +258,7 @@
       justify-content: center;
       gap: 20px;
       margin: 2rem 0;
+      flex-wrap: wrap;
     }
 
     .hacker-link {
@@ -453,6 +460,90 @@
       font-style: italic;
     }
 
+    .skills-container {
+      display: flex;
+      gap: 2rem;
+      margin-top: 1.5rem;
+    }
+    
+    .skills-column {
+      flex: 1;
+    }
+    
+    .project-item {
+      background: rgba(0, 20, 0, 0.2);
+      padding: 1rem;
+      margin-bottom: 1.5rem;
+      border-left: 3px solid #0f0;
+    }
+    
+    .certification-badge {
+      display: inline-block;
+      background: rgba(0, 255, 0, 0.1);
+      padding: 0.3rem 0.8rem;
+      margin: 0.3rem;
+      border: 1px dashed #0f0;
+      font-size: 0.9rem;
+    }
+
+    .project-title {
+      color: #0ff;
+      font-size: 1.2rem;
+      margin-bottom: 0.5rem;
+    }
+
+    /* Barres de compétences linguistiques */
+    .language-container {
+      margin-top: 1rem;
+      padding: 0 0.5rem;
+    }
+
+    .language-item {
+      margin-bottom: 1.8rem;
+    }
+
+    .language-name {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 0.7rem;
+      font-size: 1.2rem;
+      letter-spacing: 0.5px;
+    }
+
+    .language-bar {
+      height: 10px;
+      background: rgba(0, 50, 0, 0.25);
+      position: relative;
+      overflow: hidden;
+      border: 1px solid #0a0;
+      box-shadow: 0 0 8px rgba(0, 255, 0, 0.1) inset;
+    }
+
+    .language-level {
+      height: 100%;
+      background: linear-gradient(90deg, #0a0, #0f0);
+      position: relative;
+    }
+
+    .language-level::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(90deg, 
+                transparent, 
+                rgba(0, 255, 0, 0.6), 
+                transparent);
+      animation: language-glow 3s infinite;
+    }
+
+    @keyframes language-glow {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(100%); }
+    }
+
     /* Difficulty buttons */
     .difficulty-btn {
       padding: 1rem 2rem;
@@ -471,6 +562,53 @@
       color: #000;
       box-shadow: 0 0 10px #0f0;
     }
+
+    /* Mobile optimizations */
+    @media (max-width: 768px) {
+      #login h1 {
+        font-size: 1.8rem;
+      }
+
+      #code, #answer {
+        width: 150px;
+        font-size: 1.5rem;
+      }
+
+      .enter-btn, .difficulty-btn {
+        padding: 0.8rem 1.5rem;
+        font-size: 1rem;
+      }
+
+      #calculation {
+        font-size: 2rem;
+      }
+
+      .hacker-link {
+        padding: 10px 15px;
+        font-size: 1rem;
+      }
+
+      #hacker-name {
+        font-size: 2.5rem;
+      }
+
+      #access-denied {
+        font-size: 2rem;
+      }
+
+      .skills-container {
+        flex-direction: column;
+        gap: 1rem;
+      }
+      
+      .language-name {
+        font-size: 1rem;
+      }
+      
+      .language-bar {
+        height: 8px;
+      }
+    }
   </style>
 </head>
 <body>
@@ -485,18 +623,20 @@
 
   <div id="difficulty">
     <h2>SÉLECTIONNEZ LA DIFFICULTÉ</h2>
-    <button class="difficulty-btn" id="medium-btn">MOYEN</button>
-    <button class="difficulty-btn" id="hard-btn">DIFFICILE</button>
+    <button class="difficulty-btn" id="easy-btn">FACILE (6s)</button>
+    <button class="difficulty-btn" id="medium-btn">MOYEN (4s)</button>
+    <button class="difficulty-btn" id="hard-btn">DIFFICILE (3s)</button>
   </div>
 
   <div id="game">
     <h2>DÉFI MATHÉMATIQUE</h2>
-    <p>Résolvez 6 calculs en moins de 4 secondes chacun</p>
+    <p>Résolvez 6 calculs dans le temps imparti</p>
     <div id="calculation">?</div>
     <input type="number" id="answer" placeholder="Réponse" autocomplete="off">
     <button class="enter-btn" id="submit-answer">ENTRER</button>
     <div id="timer">Temps: 4.0s</div>
     <div id="score">Calculs réussis: 0/6</div>
+    <div id="best-score">Meilleur score: 0/6</div>
   </div>
 
   <div id="feedback">
@@ -529,6 +669,7 @@
 
         <div id="message-form">
           <h3>ZONE DE MESSAGE ANONYME</h3>
+          <p style="margin-bottom: 1rem; color: #0a0;">Laissez un message sans révéler votre identité...</p>
           <form id="anonymous-form">
             <input type="hidden" name="_captcha" value="false">
             <input type="hidden" name="_template" value="box">
@@ -557,65 +698,113 @@
     
     <div class="portfolio-section">
       <h2 class="portfolio-title">ILYASS MOUSSA</h2>
-      <p class="portfolio-text">Étudiant en Cybersécurité et Protection des Systèmes</p>
-      <p class="portfolio-text">Étudiant en Bachelor Cybersécurité, je suis motivé, à l'écoute et patient. Polyvalent et toujours prêt à apprendre, je suis déterminé à m'impliquer pleinement et à progresser chaque jour.</p>
+      <p class="portfolio-text">Étudiant en Bachelor Cybersécurité (BAC+3)</p>
+      <p class="portfolio-text">
+        Passionné par la sécurité informatique et les systèmes d'information, je me spécialise actuellement 
+        en cybersécurité avec une approche pratique via des laboratoires et projets concrets. Autodidacte 
+        motivé, je maîtrise les fondamentaux des tests d'intrusion, de l'analyse de vulnérabilités et de 
+        la sécurisation des infrastructures.
+      </p>
+      <div class="certification-badge">En cours: Bachelor Cybersécurité</div>
     </div>
 
     <div class="portfolio-section">
       <h2 class="portfolio-title">DIPLÔMES ET FORMATIONS</h2>
       
-      <h3>Bac+2 Cybersécurité et Protection des Systèmes</h3>
-      <p class="portfolio-date">Octobre 2024 - Mai 2026</p>
+      <h3>Bachelor Cybersécurité (BAC+3)</h3>
+      <p class="portfolio-date">Octobre 2024 - En cours (Diplôme prévu: 2027)</p>
       <p class="portfolio-text">IMIE PARIS - 70 rue Marius Aufan, 92300 Levallois Perret</p>
+      <ul class="portfolio-list">
+        <li>Spécialisation en sécurité des systèmes et réseaux</li>
+        <li>Modules: Pentesting, Cryptographie, Forensic, Sécurité Cloud</li>
+      </ul>
       
-      <h3>Baccalauréat international science mathématique</h3>
+      <h3>Baccalauréat Scientifique option Mathématiques</h3>
       <p class="portfolio-date">Septembre 2022 - Novembre 2023</p>
       <p class="portfolio-text">Lycée EL FATH - Taourirt, Maroc</p>
     </div>
 
     <div class="portfolio-section">
-      <h2 class="portfolio-title">EXPÉRIENCES PROFESSIONNELLES</h2>
+      <h2 class="portfolio-title">PROJETS TECHNIQUES</h2>
       
-      <h3>Vendeur/Accueil relation client</h3>
-      <p class="portfolio-date">Juin 2022 - Septembre 2022</p>
-      <p class="portfolio-text">Shopping Time - Taourirt, Maroc (CDI - Temps plein)</p>
-      <ul class="portfolio-list">
-        <li>Accueil, conseil et accompagnement des clients dans leurs achats</li>
-        <li>Prospection, négociation et conclusion de ventes</li>
-        <li>Atteinte des objectifs commerciaux et suivi des performances</li>
-        <li>Gestion des stocks et réassort du point de vente</li>
-        <li>Mise en place de relations durables avec les clients</li>
-        <li>Travail en équipe et participation active à l'organisation du magasin</li>
-      </ul>
+      <div class="project-item">
+        <h3>Laboratoire de sécurité réseau</h3>
+        <ul class="portfolio-list">
+          <li>Mise en place d'une architecture réseau sécurisée avec DMZ</li>
+          <li>Configuration de pare-feu (pfSense) et segmentation VLAN</li>
+          <li>Analyse des flux avec Wireshark et détection d'intrusions</li>
+        </ul>
+      </div>
       
-      <h3>Vendeur de fruits - Marché Couvert</h3>
-      <p class="portfolio-date">Juin 2019 - Août 2019</p>
-      <p class="portfolio-text">Marché Couvert - Taourirt, Maroc</p>
-      <ul class="portfolio-list">
-        <li>Accueil des clients avec conseils sur les produits</li>
-        <li>Mise en place du stand chaque matin (présentation, propreté, étiquetage)</li>
-        <li>Réapprovisionnement des étals en fonction de la demande</li>
-        <li>Gestion de la caisse (encaissement, rendu de monnaie)</li>
-        <li>Maintenir l'ordre et la propreté de l'espace de vente</li>
-      </ul>
+      <div class="project-item">
+        <h3>Environnements de test</h3>
+        <ul class="portfolio-list">
+          <li>Déploiement de machines vulnérables (Metasploitable, DVWA)</li>
+          <li>Tests d'intrusion avec Kali Linux et rédaction de rapports</li>
+          <li>Automatisation de scans avec Bash et Python</li>
+        </ul>
+      </div>
     </div>
 
     <div class="portfolio-section">
-      <h2 class="portfolio-title">COMPÉTENCES</h2>
+      <h2 class="portfolio-title">COMPÉTENCES TECHNIQUES</h2>
       
-      <h3>Informatique</h3>
-      <ul class="portfolio-list">
-        <li>Maîtrise du Pack MS Office</li>
-        <li>Recherches Internet</li>
-        <li>Bases en Cybersécurité</li>
-      </ul>
-      
-      <h3>Langues</h3>
-      <ul class="portfolio-list">
-        <li>Arabe (Langue maternelle)</li>
-        <li>Français (Courant)</li>
-        <li>Anglais (Intermédiaire)</li>
-      </ul>
+      <div class="skills-container">
+        <div class="skills-column">
+          <h3>Systèmes & Réseaux</h3>
+          <ul class="portfolio-list">
+            <li>Arch Linux / Kali Linux / Ubuntu</li>
+            <li>Windows Server Administration</li>
+            <li>Réseaux TCP/IP, VLAN, VPN</li>
+            <li>Wireshark, Nmap, Metasploit</li>
+          </ul>
+        </div>
+        
+        <div class="skills-column">
+          <h3>Programmation & Outils</h3>
+          <ul class="portfolio-list">
+            <li>Bash / PowerShell</li>
+            <li>Python (Bases en cybersécurité)</li>
+            <li>Virtualisation (VirtualBox, VMware)</li>
+            <li>GNU/Linux avancé</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="portfolio-section">
+      <h2 class="portfolio-title">LANGUES</h2>
+      <div class="language-container">
+        <div class="language-item">
+          <div class="language-name">
+            <span>Arabe</span>
+            <span>Langue maternelle</span>
+          </div>
+          <div class="language-bar">
+            <div class="language-level" style="width: 100%"></div>
+          </div>
+        </div>
+        
+        <div class="language-item">
+          <div class="language-name">
+            <span>Français</span>
+            <span>B2</span>
+          </div>
+          <div class="language-bar">
+            <div class="language-level" style="width: 70%"></div>
+          </div>
+        </div>
+        
+        <div class="language-item">
+          <div class="language-name">
+            <span>Anglais</span>
+            <span>B1</span>
+          </div>
+          <div class="language-bar">
+            <div class="language-level" style="width: 55%"></div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -656,6 +845,7 @@
     const answerInput = document.getElementById('answer');
     const timerEl = document.getElementById('timer');
     const scoreEl = document.getElementById('score');
+    const bestScoreEl = document.getElementById('best-score');
     const feedbackEl = document.getElementById('feedback');
     const feedbackText = document.getElementById('feedback-text');
     const endScreen = document.getElementById('end-screen');
@@ -666,6 +856,7 @@
     const tryAgain = document.getElementById('try-again');
     const loginBtn = document.getElementById('login-btn');
     const submitAnswerBtn = document.getElementById('submit-answer');
+    const easyBtn = document.getElementById('easy-btn');
     const mediumBtn = document.getElementById('medium-btn');
     const hardBtn = document.getElementById('hard-btn');
     const portfolioLink = document.getElementById('portfolio-link');
@@ -682,7 +873,12 @@
     const totalCalculations = 6;
     const requiredScore = 5;
     let difficultyLevel = 'medium';
+    let maxTime = 4;
     let isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
+    // Load best score from localStorage
+    let bestScore = localStorage.getItem('bestScore') || 0;
+    bestScoreEl.textContent = `Meilleur score: ${bestScore}/${totalCalculations}`;
 
     // Event listeners
     document.getElementById('code').addEventListener('input', function(e) {
@@ -695,6 +891,7 @@
     });
 
     loginBtn.addEventListener('click', handleLogin);
+    easyBtn.addEventListener('click', () => setDifficulty('easy'));
     mediumBtn.addEventListener('click', () => setDifficulty('medium'));
     hardBtn.addEventListener('click', () => setDifficulty('hard'));
     submitAnswerBtn.addEventListener('click', checkAnswer);
@@ -703,21 +900,13 @@
     portfolioClose.addEventListener('click', hidePortfolio);
 
     // Mobile optimization
-    if (isMobile) {
-      answerInput.addEventListener('keypress', function(e) {
-        if (e.key === 'Enter') {
-          e.preventDefault();
-          checkAnswer();
-          answerInput.focus(); // Keep focus for next answer
-        }
-      });
-    } else {
-      answerInput.addEventListener('keypress', function(e) {
-        if (e.key === 'Enter') {
-          checkAnswer();
-        }
-      });
-    }
+    answerInput.addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        checkAnswer();
+        answerInput.focus();
+      }
+    });
 
     // Game functions
     function handleLogin() {
@@ -737,6 +926,16 @@
       difficulty.style.display = 'none';
       game.style.display = 'flex';
       document.getElementById('matrix-bg').style.opacity = '1';
+      
+      // Set time based on difficulty
+      if (level === 'easy') {
+        maxTime = 6;
+      } else if (level === 'medium') {
+        maxTime = 4;
+      } else {
+        maxTime = 3;
+      }
+      
       initMatrix();
       startGame();
     }
@@ -753,22 +952,26 @@
       let a, b, op;
       const operations = ['+', '-', '*'];
       
-      if (difficultyLevel === 'medium') {
+      if (difficultyLevel === 'easy') {
         a = Math.floor(Math.random() * 10) + 1;
         b = Math.floor(Math.random() * 10) + 1;
+        op = operations[Math.floor(Math.random() * operations.length)];
+      } else if (difficultyLevel === 'medium') {
+        a = Math.floor(Math.random() * 15) + 1;
+        b = Math.floor(Math.random() * 15) + 1;
         op = operations[Math.floor(Math.random() * operations.length)];
       } else { // hard
         a = Math.floor(Math.random() * 20) + 1;
         b = Math.floor(Math.random() * 20) + 1;
         op = operations[Math.floor(Math.random() * operations.length)];
+        
         // 50% chance to add division in hard mode
         if (Math.random() > 0.5) {
           operations.push('/');
+          op = '/';
           // For division, ensure whole number result
-          if (op === '/') {
-            b = Math.floor(Math.random() * 10) + 1;
-            a = b * (Math.floor(Math.random() * 10) + 1);
-          }
+          b = Math.floor(Math.random() * 10) + 1;
+          a = b * (Math.floor(Math.random() * 10) + 1);
         }
       }
 
@@ -777,7 +980,7 @@
       calculationEl.textContent = currentCalculation;
 
       answerInput.value = '';
-      timeLeft = 4.0;
+      timeLeft = maxTime;
       updateTimer();
 
       clearInterval(timer);
@@ -815,14 +1018,16 @@
         showFeedback('Incorrect', 'error');
       }
 
+      // Auto-clear input after short delay
       setTimeout(() => {
+        answerInput.value = '';
         calculationsDone++;
         if (calculationsDone < totalCalculations) {
           generateCalculation();
         } else {
           endGame();
         }
-      }, 1000);
+      }, 800);
     }
 
     function timeUp() {
@@ -838,6 +1043,13 @@
     }
 
     function endGame() {
+      // Update best score
+      if (score > bestScore) {
+        bestScore = score;
+        localStorage.setItem('bestScore', bestScore);
+        bestScoreEl.textContent = `Meilleur score: ${bestScore}/${totalCalculations}`;
+      }
+
       setTimeout(() => {
         game.style.display = 'none';
         endScreen.style.display = 'flex';
